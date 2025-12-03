@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mapa de Fotografías - Coordenadas (offline Leaflet)</title>
+
+  <!-- Leaflet CSS local -->
+  <link
+    rel="stylesheet"
+    href="leaflet.css"
+  />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    #map {
+      width: 100%;
+      height: 100vh;
+    }
+    .popup-img {
+      max-width: 250px;
+      max-height: 250px;
+      display: block;
+    }
+    .leaflet-popup-content {
+      font-size: 13px;
+    }
+    #info {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.9);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<div id="map">Cargando mapa...</div>
+<div id="info"></div>
+
+<!-- Leaflet JS local -->
+<script src="leaflet.js"></script>
+
+<!-- Tus coordenadas incrustadas -->
+<script id="coordenadas-data" type="text/plain">
+ARCHIVO;LATITUD;LONGITUD;OBSERVACIÓN;;
+20251127_151334.jpg;6.2332352;-75.5685568;Deterioro de andenes.;;
+20251127_151342.jpg;6.2332352;-75.5685568;Uso de espacio público como parqueadero de motos.;;
+20251127_151352.jpg;6.2332352;-75.5685568;Deterioro de andenes y pavimento articulado.;;
+20251127_151359.jpg;6.2332352;-75.5685568;Deterioro de andenes.;;
+20251127_151405.jpg;6.2332352;-75.5685568;Falta de ornato y mantenimiento de zonas verdes.;;
+20251127_151415.jpg;6.2332352;-75.5685568;Deterioro de pavimento flexible.;;
+20251127_151419.jpg;6.2332352;-75.5685568;Deterioro de junta en pavimento flexible y pavimento articulado aparentemente por el crecimiento de raíces.;;
+20251127_151459.jpg;6.2331736;-75.5686037;Falta de ornato y mantenimiento de zonas verdes.;;
+20251127_151513.jpg;6.2332306;-75.5685934;Falta de ornato y mantenimiento de zonas verdes.;;
+20251127_151822.jpg;6.2332392;-75.5686445;Deterioro de andenes.;;
+20251127_151843.jpg;6.2329122;-75.5686492;Deterioro de andenes y pavimento flexible.;;
+20251127_151846.jpg;6.2329122;-75.5686492;Deterioro de pavimento flexible.;;
+20251127_151903.jpg;6.2329122;-75.5686492;Falta de limpieza en cunetas.;;
+20251127_151935.jpg;6.2324524;-75.5685968;Robo de tapas de medidores.;;
+20251127_151938.jpg;6.2324524;-75.5685968;Robo de tapas de medidores.;;
+20251127_151951.jpg;6.2324524;-75.5685968;Robo de tapas de medidores y falta de ornato.;;
+20251127_151955.jpg;6.2324524;-75.5685968;Deterioro de pavimento flexible.;;
+20251127_152137.jpg;6.231513;-75.5686123;Ejecución de obras de espacio público.;;
+20251127_152236.jpg;6.2310946;-75.5684567;Zona de acumulación de basura.;;
+20251127_152244.jpg;6.2310318;-75.5684103;Falta de ornato y mantenimiento de zonas verdes.;;
+20251127_152307.jpg;6.2310164;-75.5684498;Zona de acumulación de basura.;;
+20251127_152310.jpg;6.2308605;-75.5684852;Zona de acumulación de basura.;;
+20251127_152452.jpg;6.2305739;-75.5685622;Zona de acumulación de basura.;;
+20251127_152517.jpg;6.2306061;-75.5685371;Zona de acumulación de basura.;;
+20251127_152558.jpg;6.2306182;-75.5685988;Zona de acumulación de basura.;;
+20251127_152841.jpg;6.2311458;-75.5687583;Zona de acumulación de basura.;;
+20251127_155123.jpg;6.2453228;-75.5919852;Zona de acumulación de basura.;;
+20251127_155139.jpg;6.2453087;-75.5920104;Zona de acumulación de basura.;;
+20251127_155141.jpg;6.2453087;-75.5920104;Zona de acumulación de basura.;;
+20251127_155147.jpg;6.2453087;-75.5920104;Zona de acumulación de basura.;;
+20251127_155154.jpg;6.2453087;-75.5920104;Zona de acumulación de basura.;;
+20251127_155611.jpg;6.2463233;-75.5883047;Zona de acumulación de basura.;;
+20251127_160706.jpg;6.2590127;-75.5915438;Presencia de habitante de calle.;;
+20251127_160711.jpg;6.2589999;-75.5915676;Zona de acumulación de basura.;;
+20251127_160943.jpg;6.2575388;-75.5930324;Zona de acumulación de basura.;;
+20251127_161229.jpg;6.2587942;-75.5941254;Zona de acumulación de basura.;;
+20251127_161251.jpg;6.2587916;-75.5941306;Zona de acumulación de basura.;;
+20251127_161800.jpg;6.2585443;-75.5960036;Zona de acumulación de basura.;;
+20251127_161824.jpg;6.258826;-75.5960665;Zona de acumulación de basura.;;
+20251127_162000.jpg;6.2622705;-75.5951268;Presencia de habitante de calle.;;
+20251127_162123.jpg;6.2602385;-75.5965711;Zona de acumulación de basura.;;
+20251127_162128.jpg;6.2601454;-75.5965789;Zona de acumulación de basura.;;
+20251127_162339.jpg;6.2597547;-75.5959904;Zona de acumulación de material de construcción.;;
+20251201_101903.jpg;6.175376;-75.637376;Zona de acumulación de basura.;;
+20251201_101945.jpg;6.1752283;-75.6375738;Zona de acumulación de basura.;;
+20251201_102202.jpg;6.1751239;-75.6380733;Zona de acumulación de basura.;;
+20251201_102208.jpg;6.1751385;-75.6380846;Zona de acumulación de basura e invasión de espacio público.;;
+20251201_102300.jpg;6.1751918;-75.638361;Invasión de espacio público.;;
+20251201_102757.jpg;6.1750727;-75.6399421;Zona de acumulación de basura.;;
+20251201_102802.jpg;6.1750727;-75.6399421;Zona de acumulación de basura.;;
+20251201_103019.jpg;6.1744423;-75.6450593;Zona de acumulación de basura.;;
+20251201_103242.jpg;6.1749067;-75.6457624;Caída de muro de contención.;;
+20251201_103246.jpg;6.1749067;-75.6457624;Caída de muro de contención.;;
+20251201_103256.jpg;6.175072;-75.6457401;Caída de muro de contención.;;
+20251201_103305.jpg;6.175072;-75.6457401;Caída de muro de contención.;;
+20251201_103520.jpg;6.1744685;-75.6450745;Gimnasio al aire libre deteriorado.;;
+20251201_103538.jpg;6.1744299;-75.6447479;Gimnasio al aire libre deteriorado.;;
+20251201_103543.jpg;6.1744383;-75.6447547;Gimnasio al aire libre deteriorado.;;
+20251201_103708.jpg;6.1746423;-75.6432528;Zona de acumulación de basura.;;
+20251201_103716.jpg;6.1746801;-75.6432259;Invasión de espacio público.;;
+20251201_104238.jpg;6.1749653;-75.6400519;Zona de acumulación de basura.;;
+20251201_104250.jpg;6.1750165;-75.6395302;Zona de acumulación de basura.;;
+20251201_104253.jpg;6.1750165;-75.6395302;Zona de acumulación de basura.;;
+20251201_104327.jpg;6.1751738;-75.6376726;Zona de acumulación de basura.;;
+</script>
+
+<script>
+  function init() {
+    const mapDiv = document.getElementById('map');
+    const infoEl = document.getElementById('info');
+
+    if (typeof L === 'undefined') {
+      mapDiv.innerHTML = 'Leaflet no se cargó. Revisa que leaflet.js y leaflet.css estén en la misma carpeta que este HTML.';
+      return;
+    }
+
+    const map = L.map('map').setView([6.24, -75.57], 13); // Centro aproximado Medellín
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    infoEl.textContent = 'Cargando puntos...';
+
+    const raw = document.getElementById('coordenadas-data').textContent.trim();
+
+    const lines = raw
+      .split(/\r?\n/)
+      .map(l => l.trim())
+      .filter(l => l.length > 0);
+
+    if (lines.length < 2) {
+      infoEl.textContent = 'No hay datos suficientes en el CSV.';
+      return;
+    }
+
+    const headerLine = lines[0];
+    const delimiter = headerLine.includes(';') ? ';' : ',';
+
+    const headers = headerLine.split(delimiter).map(h => h.trim().toUpperCase());
+
+    function idx(nombre) {
+      return headers.indexOf(nombre);
+    }
+
+    const idxArchivo = idx('ARCHIVO');
+    const idxLat = idx('LATITUD');
+    const idxLng = idx('LONGITUD');
+    let idxObs = idx('OBSERVACIÓN');
+    if (idxObs === -1) idxObs = idx('OBSERVACION');
+
+    if (idxArchivo === -1 || idxLat === -1 || idxLng === -1) {
+      infoEl.textContent = 'Encabezados incorrectos en el CSV.';
+      return;
+    }
+
+    const puntos = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(delimiter);
+
+      const archivo = (cols[idxArchivo] || '').trim();
+      const latStr = (cols[idxLat] || '').toString().trim();
+      const lngStr = (cols[idxLng] || '').toString().trim();
+      const obs = idxObs >= 0 ? (cols[idxObs] || '').trim() : '';
+
+      if (!archivo || !latStr || !lngStr) continue;
+
+      const lat = parseFloat(latStr.replace(',', '.'));
+      const lng = parseFloat(lngStr.replace(',', '.'));
+
+      if (isNaN(lat) || isNaN(lng)) continue;
+
+      const tieneRuta = archivo.includes('/') || archivo.includes('\\');
+      const rutaImagen = tieneRuta ? archivo : 'fotos/' + archivo;
+
+      puntos.push({ archivo, ruta: rutaImagen, lat, lng, obs });
+    }
+
+    infoEl.textContent = `Puntos cargados: ${puntos.length}`;
+
+    if (!puntos.length) return;
+
+    const bounds = [];
+
+    puntos.forEach(p => {
+      const m = L.marker([p.lat, p.lng]).addTo(map);
+      const popupContent = `
+        <strong>${p.archivo}</strong><br/>
+        ${p.obs ? `<em>${p.obs}</em><br/>` : ''}
+        <img src="${p.ruta}" alt="${p.archivo}" class="popup-img" /><br/>
+        Lat: ${p.lat.toFixed(6)}, Lng: ${p.lng.toFixed(6)}
+      `;
+      m.bindPopup(popupContent);
+      bounds.push([p.lat, p.lng]);
+    });
+
+    if (bounds.length > 1) {
+      map.fitBounds(bounds, { padding: [30, 30] });
+    } else if (bounds.length === 1) {
+      map.setView(bounds[0], 18);
+    }
+  }
+
+  window.onload = init;
+</script>
+
+</body>
+</html>
